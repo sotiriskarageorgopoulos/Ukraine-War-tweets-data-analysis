@@ -6,9 +6,15 @@ df = pd.read_csv("./clear_data/tweets.csv",sep=",")
 print(df.corr(method="pearson"))
 
 sns.set_theme(style="darkgrid")
-sns.jointplot(x=df["quote_count"],y=df["reply_count"],color="r",kind="reg")
-sns.jointplot(x=df["quote_count"],y=df["like_count"],color="r",kind="reg")
-sns.jointplot(x=df["reply_count"],y=df["like_count"],color="r",kind="reg")
-
+sns.pairplot(df[["retweet_count","reply_count","like_count","quote_count"]], 
+                    kind="reg",
+                    plot_kws={
+                        'line_kws':{'color':'#4d3735'},
+                        'scatter_kws': {
+                            'color': '#9c4f46'
+                        }
+                    },
+                    diag_kws={'color':'#9c4f46'},
+                    diag_kind="kde")
 plt.show(block=False)
 plt.pause(3000)
