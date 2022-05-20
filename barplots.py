@@ -40,10 +40,12 @@ sns.set_theme(style="whitegrid")
 #top 10 hashtags plot
 hashtags_plot = sns.barplot(data=top_10_hashtags_df,x="hashtag",y="count")
 plt.show()
+plt.pause(3000)
 
-#top 20 mentions plot
+#top 10 mentions plot
 mentions_plot = sns.barplot(data=top_10_mentions_df,x="mention",y="count")
 plt.show()
+plt.pause(3000)
 
 #languages plot
 lang_plot = sns.barplot(data=lang_df, x="language",y="tweets", palette="rocket")

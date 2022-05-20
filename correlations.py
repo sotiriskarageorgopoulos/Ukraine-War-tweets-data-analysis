@@ -3,7 +3,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 df = pd.read_csv("./clear_data/tweets.csv",sep=",")
-print(df.corr(method="pearson"))
+correlation_matrix = df[["retweet_count","reply_count","like_count","quote_count"]].corr(method="pearson")
+sns.heatmap(correlation_matrix,annot=True)
+plt.show()
 
 sns.set_theme(style="darkgrid")
 sns.pairplot(df[["retweet_count","reply_count","like_count","quote_count"]], 
