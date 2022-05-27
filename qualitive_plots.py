@@ -17,12 +17,6 @@ content_count = [sensitive_content_count,non_sensitive_content_count]
 count_of_sources = pd.DataFrame(df.groupby(["source"])["source"].count())
 top_5_sources_count = list(count_of_sources.stack().nlargest(5))
 
-langs_from_csv = dict(df.groupby('lang')['lang'].count())
-lang_df = pd.DataFrame.from_dict({
-    "language": list(langs_from_csv.keys()),
-    "tweets": list(langs_from_csv.values()),
-})
-
 hashtags_count = dict(df_hashtags.groupby('hashtags')['hashtags'].count())
 top_10_hashtags_count = list(sorted(hashtags_count.items(), key=lambda item: item[1],reverse=True))[:10]
 top_10_hashtags_df = pd.DataFrame({
@@ -37,9 +31,20 @@ top_10_mentions_df = pd.DataFrame({
     "count": map(lambda item: item[1],top_10_mentions_count)
 })
 
+langs_count = dict(df.groupby('lang')['lang'].count())
+top_5_langs_count = list(sorted(langs_count.items(),key=lambda item: item[1],reverse=True))[:5]
+langs_df = pd.DataFrame({
+    "lang": langs_count.keys(),
+    "count": langs_count.values()
+})
+top_5_langs_df = pd.DataFrame({
+    "lang": map(lambda item: item[0],top_5_langs_count),
+    "count": map(lambda item: item[1],top_5_langs_count)
+})
+
 hashtags_in_string = " ".join(h for h in df_hashtags["hashtags"])
 mentions_in_string = " ".join(m for m in df_mentions["mentions"])
-langs_in_string = " ".join(l for l in lang_df["language"])
+langs_in_string = " ".join(l for l in langs_df["lang"])
 h_word_cloud = WordCloud(collocations = False, background_color = 'white').generate(hashtags_in_string)
 m_word_cloud = WordCloud(collocations = False, background_color = 'white').generate(mentions_in_string)
 l_word_cloud = WordCloud(collocations = False, background_color = 'white').generate(langs_in_string)
@@ -63,7 +68,9 @@ plt.show(block=False)
 plt.pause(3000)
 
 #languages word cloud
-plt.imshow(l_word_cloud,interpolation='bilinear')
+l_fig, l_axs = plt.subplots(nrows=2)
+sns.barplot(data=top_5_langs_df,x="lang",y="count",ax=l_axs[0])
+l_axs[1].imshow(l_word_cloud,interpolation='bilinear')
 plt.axis("off")
 plt.show(block=False)
 plt.pause(3000)
