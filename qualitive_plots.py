@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from wordcloud import WordCloud
 
 df = pd.read_csv("./clear_data/tweets.csv",sep=",")
 df_hashtags = pd.read_csv("./clear_data/hashtags.csv",sep=",")
@@ -36,19 +37,34 @@ top_10_mentions_df = pd.DataFrame({
     "count": map(lambda item: item[1],top_10_mentions_count)
 })
 
+hashtags_in_string = " ".join(h for h in df_hashtags["hashtags"])
+mentions_in_string = " ".join(m for m in df_mentions["mentions"])
+langs_in_string = " ".join(l for l in lang_df["language"])
+h_word_cloud = WordCloud(collocations = False, background_color = 'white').generate(hashtags_in_string)
+m_word_cloud = WordCloud(collocations = False, background_color = 'white').generate(mentions_in_string)
+l_word_cloud = WordCloud(collocations = False, background_color = 'white').generate(langs_in_string)
+
 sns.set_theme(style="whitegrid")
-#top 10 hashtags plot
-hashtags_plot = sns.barplot(data=top_10_hashtags_df,x="hashtag",y="count")
-plt.show()
+
+h_fig, h_axs = plt.subplots(nrows=2)
+hashtags_plot = sns.barplot(data=top_10_hashtags_df,x="hashtag",y="count",ax=h_axs[0]) #top 10 hashtags bar plot
+
+h_axs[1].imshow(h_word_cloud,interpolation='bilinear')
+h_axs[1].axis("off")
+plt.show(block=False)
 plt.pause(3000)
 
-#top 10 mentions plot
-mentions_plot = sns.barplot(data=top_10_mentions_df,x="mention",y="count")
-plt.show()
+m_fig, m_axs = plt.subplots(nrows=2)
+mentions_plot = sns.barplot(data=top_10_mentions_df,x="mention",y="count",ax=m_axs[0]) #top 10 mentions bar plot
+
+m_axs[1].imshow(m_word_cloud,interpolation='bilinear')
+m_axs[1].axis("off")
+plt.show(block=False)
 plt.pause(3000)
 
-#languages plot
-lang_plot = sns.barplot(data=lang_df, x="language",y="tweets", palette="rocket")
+#languages word cloud
+plt.imshow(l_word_cloud,interpolation='bilinear')
+plt.axis("off")
 plt.show(block=False)
 plt.pause(3000)
 
