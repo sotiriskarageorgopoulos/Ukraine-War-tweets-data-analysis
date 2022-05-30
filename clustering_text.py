@@ -25,7 +25,6 @@ tf_idf_vector = TfidfVectorizer(tokenizer=tokenize,
                                 stop_words='english',
                                 norm="l1")
 texts_tf_idf = tf_idf_vector.fit_transform(en_tweets["text"]).toarray()
-# texts_df = pd.DataFrame(texts_tf_idf,columns=tf_idf_vector.get_feature_names())
 
 pca = PCA(2)
 principal_components = pca.fit_transform(texts_tf_idf)
