@@ -14,7 +14,7 @@ off_norm_df = pd.concat([en_mlma_df[en_mlma_df["sentiment"] == 'normal'], en_mlm
 #Classifier statistical estimation for english data set
 cv = KFold(n_splits=10, random_state=42, shuffle=True)
 
-text_clf = Pipeline([('count_texts', CountVectorizer()),
+text_clf = Pipeline([('count_texts', CountVectorizer(stop_words='english')),
                      ('tf_idf', TfidfTransformer()),
                      ('classifier', MultinomialNB()),
                     ])
