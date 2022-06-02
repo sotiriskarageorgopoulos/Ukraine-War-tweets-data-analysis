@@ -18,17 +18,17 @@ count_of_sources = pd.DataFrame(df.groupby(["source"])["source"].count())
 top_5_sources_count = list(count_of_sources.stack().nlargest(5))
 
 hashtags_count = dict(df_hashtags.groupby('hashtags')['hashtags'].count())
-top_10_hashtags_count = list(sorted(hashtags_count.items(), key=lambda item: item[1],reverse=True))[:10]
-top_10_hashtags_df = pd.DataFrame({
-    "hashtag": map(lambda item: item[0],top_10_hashtags_count),
-    "count": map(lambda item: item[1],top_10_hashtags_count)
+top_5_hashtags_count = list(sorted(hashtags_count.items(), key=lambda item: item[1],reverse=True))[:5]
+top_5_hashtags_df = pd.DataFrame({
+    "hashtag": map(lambda item: item[0],top_5_hashtags_count),
+    "count": map(lambda item: item[1],top_5_hashtags_count)
 })
 
 mentions_count = dict(df_mentions.groupby('mentions')['mentions'].count())
-top_10_mentions_count = list(sorted(mentions_count.items(),key=lambda item: item[1],reverse=True))[:10]
-top_10_mentions_df = pd.DataFrame({
-    "mention": map(lambda item: item[0],top_10_mentions_count),
-    "count": map(lambda item: item[1],top_10_mentions_count)
+top_5_mentions_count = list(sorted(mentions_count.items(),key=lambda item: item[1],reverse=True))[:5]
+top_5_mentions_df = pd.DataFrame({
+    "mention": map(lambda item: item[0],top_5_mentions_count),
+    "count": map(lambda item: item[1],top_5_mentions_count)
 })
 
 langs_count = dict(df.groupby('lang')['lang'].count())
@@ -50,9 +50,9 @@ m_word_cloud = WordCloud(collocations = False, background_color = 'white').gener
 l_word_cloud = WordCloud(collocations = False, background_color = 'white').generate(langs_in_string)
 
 sns.set_theme(style="whitegrid")
-
+sns.set(font_scale=2)
 h_fig, h_axs = plt.subplots(nrows=2)
-hashtags_plot = sns.barplot(data=top_10_hashtags_df,x="hashtag",y="count",ax=h_axs[0]) #top 10 hashtags bar plot
+hashtags_plot = sns.barplot(data=top_5_hashtags_df,x="hashtag",y="count",ax=h_axs[0]) #top 10 hashtags bar plot
 
 h_axs[1].imshow(h_word_cloud,interpolation='bilinear')
 h_axs[1].axis("off")
@@ -60,7 +60,7 @@ plt.show(block=False)
 plt.pause(3000)
 
 m_fig, m_axs = plt.subplots(nrows=2)
-mentions_plot = sns.barplot(data=top_10_mentions_df,x="mention",y="count",ax=m_axs[0]) #top 10 mentions bar plot
+mentions_plot = sns.barplot(data=top_5_mentions_df,x="mention",y="count",ax=m_axs[0]) #top 10 mentions bar plot
 
 m_axs[1].imshow(m_word_cloud,interpolation='bilinear')
 m_axs[1].axis("off")
@@ -82,7 +82,7 @@ content_plot.set_xlabel("content categories")
 plt.show(block=False)
 plt.pause(3000)
 
-#top 10 sources barplot
+#top 5 sources barplot
 sources = ['Twitter for Android','Twitter Web App','Twitter for iPhone','Twitter for iPad','TweetDeck']
 sources_barplot = sns.barplot(x=sources,y=top_5_sources_count,palette="deep")
 sources_barplot.set_xlabel("sources")

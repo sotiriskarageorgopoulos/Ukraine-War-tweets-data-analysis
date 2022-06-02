@@ -30,6 +30,8 @@ sentiments_df = pd.DataFrame.from_dict({
     "tweets": [pos_tweets,neg_tweets,neutral_tweets]
 })
 
+print(sentiments_df)
+sns.set(font_scale=1.5)
 fig, axs = plt.subplots(ncols=3)
 like_replies_plot = sns.scatterplot(data=df_tweets, x="like_count", y="reply_count", hue="sentiments", style="sentiments",ax=axs[2])
 like_replies_plot.set_xlabel("likes")

@@ -25,7 +25,6 @@ tf_idf_vector = TfidfVectorizer(tokenizer=tokenize,
                                 stop_words='english',
                                 norm="l1")
 texts_tf_idf = tf_idf_vector.fit_transform(en_tweets["text"]).toarray()
-
 pca = PCA(2)
 principal_components = pca.fit_transform(texts_tf_idf)
 kmeans_algo = KMeans(n_clusters=4, random_state=0)
@@ -35,6 +34,7 @@ u_labels = np.unique(labels)
 s = silhouette_score(principal_components, labels, metric="euclidean")
 print(f"Silhouette score is: {s}")
 
-sns.scatterplot(x=principal_components[:,0], y=principal_components[:,1], hue=labels, palette="deep")
+sns.set(font_scale=2)
+sns.scatterplot(x=principal_components[:,0], y=principal_components[:,1], hue=labels, palette="deep", s=200)
 plt.show(block=False)
 plt.pause(3000)

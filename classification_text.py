@@ -12,7 +12,7 @@ en_mlma_df = pd.read_csv("./clear_data/en_dataset.csv")
 off_norm_df = pd.concat([en_mlma_df[en_mlma_df["sentiment"] == 'normal'], en_mlma_df[en_mlma_df["sentiment"] == 'offensive']])
 
 #Classifier statistical estimation for english data set
-cv = KFold(n_splits=10, random_state=42, shuffle=True)
+cv = KFold(n_splits=5, random_state=42, shuffle=True)
 
 text_clf = Pipeline([('count_texts', CountVectorizer(stop_words='english')),
                      ('tf_idf', TfidfTransformer()),
@@ -26,7 +26,6 @@ recall_scores = cross_val_score(text_clf,off_norm_df["tweet"], off_norm_df["sent
 
 print(f'Mean Accuracy: {mean(accuracy_scores)} \n Std Accuracy: {std(accuracy_scores)}')
 print(f'Mean F1 Score: {mean(f1_scores)} \n Std F1 Score: {std(f1_scores)}')
-print(f'Mean Recall: {mean(recall_scores)} \n Std Recall Score: {std(recall_scores)}')
 
 #Prediction of tweets label
 text_clf = text_clf.fit(off_norm_df["tweet"], off_norm_df["sentiment"])
