@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import CountVectorizer,TfidfTransformer
 from sklearn.model_selection import KFold,cross_val_score,cross_val_predict
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import make_scorer,f1_score,recall_score
+from sklearn.model_selection import GridSearchCV
 
 tweets = pd.read_csv("./clear_data/tweets.csv")
 en_mlma_df = pd.read_csv("./clear_data/en_dataset.csv")
@@ -28,9 +29,10 @@ print(f'Mean Accuracy: {mean(accuracy_scores)} \n Std Accuracy: {std(accuracy_sc
 print(f'Mean F1 Score: {mean(f1_scores)} \n Std F1 Score: {std(f1_scores)}')
 
 #Prediction of tweets label
-text_clf = text_clf.fit(off_norm_df["tweet"], off_norm_df["sentiment"])
+clf = GridSearchCV(text_clf, param_grid={}, cv=cv)
+clf.fit(off_norm_df["tweet"], off_norm_df["sentiment"])
 tweets_in_en = tweets[tweets["lang"] == "en"]
-en_predictions = text_clf.predict(tweets_in_en["text"])
+en_predictions = clf.predict(tweets_in_en["text"])
 
 labels,data = unique(en_predictions,return_counts=True)
 
